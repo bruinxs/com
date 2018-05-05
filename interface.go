@@ -175,6 +175,26 @@ func ItoFloat64Must(i interface{}) float64 {
 	return v
 }
 
+//ItoMap convert interface to Map.
+func ItoMap(i interface{}) (Map, error) {
+	if i == nil {
+		return nil, fmt.Errorf("arg interface value is null")
+	}
+	if m, ok := i.(Map); ok {
+		return m, nil
+	} else if m, ok := i.(map[string]interface{}); ok {
+		return Map(m), nil
+	} else {
+		return nil, fmt.Errorf("incompactable value(%v)", i)
+	}
+}
+
+//ItoMapMust must convert interface to Map.
+func ItoMapMust(i interface{}) Map {
+	m, _ := ItoMap(i)
+	return m
+}
+
 //ItoSlice convert interface to interface slice.
 func ItoSlice(i interface{}) []interface{} {
 	if vals, ok := i.([]interface{}); ok {
@@ -270,5 +290,28 @@ func ItoFloat64Slice(i interface{}) ([]float64, error) {
 //ItoFloat64SliceMust convert interface to float64 slice.
 func ItoFloat64SliceMust(i interface{}) []float64 {
 	v, _ := ItoFloat64Slice(i)
+	return v
+}
+
+//ItoMapSlice convert interface to Map slice.
+func ItoMapSlice(i interface{}) ([]Map, error) {
+	vals := ItoSlice(i)
+	if vals == nil {
+		return nil, nil
+	}
+	ms := []Map{}
+	for _, v := range vals {
+		mv, err := ItoMap(v)
+		if err != nil {
+			return nil, err
+		}
+		ms = append(ms, mv)
+	}
+	return ms, nil
+}
+
+//ItoMapSliceMust must convert interface to Map slice.
+func ItoMapSliceMust(i interface{}) []Map {
+	v, _ := ItoMapSlice(i)
 	return v
 }
