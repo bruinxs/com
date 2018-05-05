@@ -178,7 +178,7 @@ func ItoFloat64Must(i interface{}) float64 {
 //ItoMap convert interface to Map.
 func ItoMap(i interface{}) (Map, error) {
 	if i == nil {
-		return nil, fmt.Errorf("arg interface value is null")
+		return nil, nil
 	}
 	if m, ok := i.(Map); ok {
 		return m, nil

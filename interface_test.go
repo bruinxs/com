@@ -3,8 +3,6 @@ package com
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-
 	. "github.com/smartystreets/goconvey/convey"
 )
 
@@ -195,49 +193,129 @@ func TestItoFloat64(t *testing.T) {
 }
 
 func TestItoStringSlice(t *testing.T) {
-	var ss []string
-	assert.Equal(t, ItoStringSlice(nil), ss)
-	assert.ElementsMatch(t, ItoStringSlice([]int{1, 2, 3}), []string{"1", "2", "3"})
+	Convey("convert interface to string slice", t, func() {
+		So(ItoStringSlice(nil), ShouldBeNil)
+		So(ItoStringSlice([]int{1, 2, 3}), ShouldResemble, []string{"1", "2", "3"})
+	})
 }
 
 func TestItoIntSlice(t *testing.T) {
-	var ii []int
-	is, err := ItoIntSlice(nil)
-	assert.Equal(t, err, nil)
-	assert.Equal(t, is, ii)
+	Convey("convert interface to int slice", t, func() {
 
-	is, err = ItoIntSlice([]string{"1", "2", "3"})
-	assert.Equal(t, err, nil)
-	assert.ElementsMatch(t, is, []int{1, 2, 3})
+		Convey("nil argument", func() {
+			iv, err := ItoIntSlice(nil)
+			So(err, ShouldBeNil)
+			So(iv, ShouldBeNil)
+		})
 
-	is = ItoIntSliceMust([]string{"1", "2", "3"})
-	assert.ElementsMatch(t, is, []int{1, 2, 3})
+		Convey("llegal argument", func() {
+			iv, err := ItoIntSlice([]string{"1", "2", "3"})
+			So(err, ShouldBeNil)
+			So(iv, ShouldResemble, []int{1, 2, 3})
+
+		})
+
+		Convey("must convert", func() {
+			iv := ItoIntSliceMust([]string{"1", "2", "3"})
+			So(iv, ShouldResemble, []int{1, 2, 3})
+		})
+	})
 }
 
 func TestItoInt64Slice(t *testing.T) {
-	var ii []int64
-	is, err := ItoInt64Slice(nil)
-	assert.Equal(t, err, nil)
-	assert.Equal(t, is, ii)
+	Convey("convert interface to int64 slice", t, func() {
 
-	is, err = ItoInt64Slice([]string{"1", "2", "3"})
-	assert.Equal(t, err, nil)
-	assert.ElementsMatch(t, is, []int64{1, 2, 3})
+		Convey("nil argument", func() {
+			iv, err := ItoInt64Slice(nil)
+			So(err, ShouldBeNil)
+			So(iv, ShouldBeNil)
+		})
 
-	is = ItoInt64SliceMust([]string{"1", "2", "3"})
-	assert.ElementsMatch(t, is, []int64{1, 2, 3})
+		Convey("llegal argument", func() {
+			iv, err := ItoInt64Slice([]string{"1", "2", "3"})
+			So(err, ShouldBeNil)
+			So(iv, ShouldResemble, []int64{1, 2, 3})
+
+		})
+
+		Convey("must convert", func() {
+			iv := ItoInt64SliceMust([]string{"1", "2", "3"})
+			So(iv, ShouldResemble, []int64{1, 2, 3})
+		})
+	})
 }
 
 func TestItoFloat64Slice(t *testing.T) {
-	var fi []float64
-	fs, err := ItoFloat64Slice(nil)
-	assert.Equal(t, err, nil)
-	assert.Equal(t, fs, fi)
+	Convey("convert interface to float64 slice", t, func() {
 
-	fs, err = ItoFloat64Slice([]string{"1.1", "2.2", "3.3"})
-	assert.Equal(t, err, nil)
-	assert.ElementsMatch(t, fs, []float64{1.1, 2.2, 3.3})
+		Convey("nil argument", func() {
+			iv, err := ItoFloat64Slice(nil)
+			So(err, ShouldBeNil)
+			So(iv, ShouldBeNil)
+		})
 
-	fs = ItoFloat64SliceMust([]string{"1.1", "2.2", "3.3"})
-	assert.ElementsMatch(t, fs, []float64{1.1, 2.2, 3.3})
+		Convey("llegal argument", func() {
+			iv, err := ItoFloat64Slice([]string{"1.1", "2.2", "3.3"})
+			So(err, ShouldBeNil)
+			So(iv, ShouldResemble, []float64{1.1, 2.2, 3.3})
+
+		})
+
+		Convey("must convert", func() {
+			iv := ItoFloat64SliceMust([]string{"1.1", "2.2", "3.3"})
+			So(iv, ShouldResemble, []float64{1.1, 2.2, 3.3})
+		})
+	})
+}
+
+func TestItoMap(t *testing.T) {
+	Convey("convert interface to Map", t, func() {
+		Convey("illegal argument", func() {
+
+			mv, err := ItoMap(1)
+			So(err, ShouldNotBeNil)
+			So(mv, ShouldBeNil)
+		})
+
+		Convey("nil argument", func() {
+			mv, err := ItoMap(nil)
+			So(err, ShouldBeNil)
+			So(mv, ShouldBeNil)
+
+		})
+
+		Convey("legal argument", func() {
+			m := map[string]interface{}{"foo": "bar"}
+
+			mv, err := ItoMap(m)
+			So(err, ShouldBeNil)
+			So(mv, ShouldEqual, m)
+
+			mv, err = ItoMap(mv)
+			So(err, ShouldBeNil)
+			So(mv, ShouldEqual, m)
+		})
+	})
+}
+
+func TestItoMapSlice(t *testing.T) {
+	Convey("convert interface to Map slice", t, func() {
+		Convey("nil argument", func() {
+			mv, err := ItoMapSlice(nil)
+			So(err, ShouldBeNil)
+			So(mv, ShouldBeNil)
+		})
+
+		Convey("llegal argument", func() {
+			mv, err := ItoMapSlice([]map[string]interface{}{nil, {"foo": "bar"}})
+			So(err, ShouldBeNil)
+			So(mv, ShouldResemble, []Map{nil, {"foo": "bar"}})
+
+		})
+
+		Convey("must convert", func() {
+			mv := ItoMapSliceMust([]map[string]interface{}{nil, {"foo": "bar"}})
+			So(mv, ShouldResemble, []Map{nil, {"foo": "bar"}})
+		})
+	})
 }
