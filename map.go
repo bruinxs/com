@@ -3,6 +3,16 @@ package com
 //Map like a object
 type Map map[string]interface{}
 
+//Set set value on key, if value is nil then remove it
+func (m Map) Set(key string, value interface{}) Map {
+	if value == nil {
+		delete(m, key)
+	} else {
+		m[key] = value
+	}
+	return m
+}
+
 //Exist check if exist the key
 func (m Map) Exist(key string) bool {
 	if m == nil {

@@ -89,3 +89,16 @@ func TestMap(t *testing.T) {
 		})
 	})
 }
+
+func TestMapSet(t *testing.T) {
+	Convey("set map value", t, func() {
+		m := Map{}
+		m.Set("k", 1).Set("k2", "str")
+		So(m.Exist("k2"), ShouldBeTrue)
+		So(m.Int("k"), ShouldEqual, 1)
+		So(m.String("k2"), ShouldEqual, "str")
+
+		m.Set("k2", nil)
+		So(m.Exist("k2"), ShouldBeFalse)
+	})
+}
