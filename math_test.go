@@ -42,3 +42,21 @@ func BenchmarkPow(b *testing.B) {
 		PowInt(x, y)
 	}
 }
+
+func Test_Round(t *testing.T) {
+	Convey("round 2", t, func() {
+		for _, arg := range []struct {
+			Val  float64
+			Want float64
+		}{
+			{1.0, 1.0},
+			{1.33333, 1.33},
+			{1.334, 1.33},
+			{1.335, 1.34},
+			{0.9, 0.9},
+			{0.995, 1.0},
+		} {
+			So(Round(arg.Val, 2), ShouldEqual, arg.Want)
+		}
+	})
+}
