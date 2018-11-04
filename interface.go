@@ -15,7 +15,7 @@ func ItoString(i interface{}) string {
 	case reflect.String:
 		return i.(string)
 	default:
-		return fmt.Sprintf("%v", i)
+		return fmt.Sprintf("%s", i)
 	}
 }
 
