@@ -14,8 +14,10 @@ func ItoString(i interface{}) string {
 	switch reflect.TypeOf(i).Kind() {
 	case reflect.String:
 		return i.(string)
-	default:
+	case reflect.Slice:
 		return fmt.Sprintf("%s", i)
+	default:
+		return fmt.Sprintf("%v", i)
 	}
 }
 

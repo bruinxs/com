@@ -15,6 +15,8 @@ func TestItoString(t *testing.T) {
 			{"string", "string"},
 			{12.34, "12.34"},
 			{nil, ""},
+			{1, "1"},
+			{[]byte("bytes"), "bytes"},
 		} {
 			So(ItoString(arg.i), ShouldEqual, arg.want)
 		}
